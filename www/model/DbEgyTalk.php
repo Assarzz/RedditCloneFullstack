@@ -89,10 +89,32 @@ class DbEgyTalk
     * @return $response användardata eller tom [] om ingen anvädare hittats eller fel inträffat
     */
    function getUserFromUid($uid){
+
+      // gets everything from user including uid
+
       $response = [];
-      
       $stmt = $this->db->prepare("SELECT * FROM user WHERE uid = :uid");
       $stmt->bindValue(":uid", $uid);
+      $stmt->execute();
+
+      if ($stmt->rowCount() == 1) {
+         // Hämtar användaren, kan endast vara 1 person
+         $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+         $response = $user;
+         
+      }
+
+      return $response;
+
+   }
+   function getUserFromUsername($username){
+
+      // gets everything from user including uid
+
+      $response = [];
+      $stmt = $this->db->prepare("SELECT * FROM user WHERE username = :username");
+      $stmt->bindValue(":username", $username);
       $stmt->execute();
 
       if ($stmt->rowCount() == 1) {
@@ -121,13 +143,14 @@ class DbEgyTalk
    }
    function getPosts($pidStart, $pidEnd){
       // both pidStart and end is included
+      //docker stop $(docker ps -a -q)  && docker rm $(docker ps -a -q)
+      // overly ambitious failing statement: $sqlStatement = "SELECT post.*, user.firstname, user.surname, user.username, comment.cid, comment.comment_txt, comment.date FROM post INNER JOIN user ON post.uid = user.uid LEFT JOIN comment ON comment.pid = post.pid WHERE post.pid >= :pidStart && post.pid <= :pidEnd ORDER BY post.pid ASC;";
+
       $response = [];
-      
       $stmt = $this->db->prepare("SELECT * FROM post WHERE pid >= :pidStart && pid <= :pidEnd");
       $stmt->bindValue(":pidStart", $pidStart);
       $stmt->bindValue(":pidEnd", $pidEnd);
 
-      //echo "SELECT * FROM post WHERE uid >= ".$pidStart." && uid <= ".$pidEnd;
       $stmt->execute();
 
       $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -165,6 +188,57 @@ class DbEgyTalk
 
       // KOD!
 
+      return $comments;
+   }
+
+   function getCommentsFromPid($pid){
+      $comments = [];
+
+      $stmt = $this->db->prepare("SELECT comment.*, user.firstname, user.surname, user.username FROM 
+      comment JOIN user
+      ON comment.uid = user.uid
+      WHERE comment.pid = :pid;");
+      $stmt->bindValue(":pid", $pid);
+      $stmt->execute();
+
+      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      foreach( $result as $row ){
+         $comments[] = $row;
+      }
+      return $comments;
+   }
+
+   function getCommentsAndOPFromUid($uid){
+      $comments = [];
+
+      $sqlStatement = "SELECT
+      c.cid,
+      c.comment_txt,
+      c.uid,
+      c.pcid,
+      p.pid AS ppid,
+      COALESCE(pc.comment_txt, p.post_txt) AS parent_txt,
+      COALESCE(pc.uid, p.uid) AS parent_uid
+  FROM
+      comment c
+  LEFT JOIN
+      comment pc ON c.pcid IS NOT NULL AND c.pcid = pc.cid
+  LEFT JOIN
+      post p ON c.pcid IS NULL AND c.pid = p.pid
+  WHERE c.uid = :uid; ";
+
+      $stmt = $this->db->prepare($sqlStatement);
+      $stmt->bindValue(":uid", $uid);
+      $stmt->execute();
+
+      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      foreach( $result as $row ){
+
+         $row["user"] = $this->getUserFromUid($row["uid"]);
+         $row["parentUser"] = $this->getUserFromUid($row["parent_uid"]);
+
+         $comments[] = $row;
+      }
       return $comments;
    }
 
@@ -216,11 +290,19 @@ class DbEgyTalk
     * Hämtar alla avändare i nätverket
     * @return array med användare
     */
-   function getUsers(){
+   function getAllUsers(){
       $users = [];
       
-      // KOD!
+      $stmt = $this->db->prepare("SELECT * FROM user");
 
+      $stmt->execute();
+
+      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      foreach( $result as $row ){
+         $users[] = $row;
+
+      }
+      
       return $users;
    }
 

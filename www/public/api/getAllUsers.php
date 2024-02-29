@@ -3,10 +3,11 @@
  * Returnerar alla användare.
  * Viktigt att returnera uid, och namn
  */
-session_start();
-$result= [];
+include('../../model/DbEgyTalk.php'); 
+$db = new DbEgyTalk();
 
-// KOD!
+session_start();
+$result= $db->getAllUsers();
 
 header('Content-Type: application/json');
 echo json_encode($result, JSON_UNESCAPED_UNICODE);

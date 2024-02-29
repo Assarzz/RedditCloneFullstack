@@ -2,6 +2,7 @@
    import { user } from "$lib/stores/user.js";
    import { goto } from "$app/navigation";
    import { page } from "$app/stores";
+    import Search from "./Search.svelte";
 
    async function signOut() {
       if ($user.auth) {
@@ -13,12 +14,7 @@
    }
 </script>
 
-<form>
-   <input type="text" name="searchUsr" placeholder="Sök vänner" size="30" />
-   <button class="search">
-      <img src="/images/searchIcon.png" alt="Search" />
-   </button>
-</form>
+<Search></Search>
 
 <nav>
    <ul>

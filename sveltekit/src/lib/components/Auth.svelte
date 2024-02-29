@@ -14,8 +14,8 @@
         method: "post",
         body: data
      });
-
      const result = await response.json()
+
       if (result.auth) {
          goto("/")
       }
