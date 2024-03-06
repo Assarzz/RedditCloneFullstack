@@ -2,13 +2,15 @@
 <script>
 
 import PostForm from "$lib/components/PostForm.svelte";
-    import { each } from "svelte/internal";
+import { each } from "svelte/internal";
 import Comment from "./Comment.svelte";
 
 import {CommentTree} from "../shared/commentTree.mjs"
-    import CommentForm from "./CommentForm.svelte";
+import CommentForm from "./CommentForm.svelte";
 import UserTag from "./UserTag.svelte";
 import PostActionIcon from "./PostActionIcon.svelte"
+import ResponseBar from "./postRepyComponents/ResponseBar.svelte";
+
 export let post;
 
     const commentTree = new CommentTree(post.commentsData)
@@ -21,75 +23,49 @@ export let post;
 <article>
 
 
-  <UserTag details={{username:post.username, uid:post.uid}}></UserTag>
+  <div class="postItem">
+    <UserTag details={{username:post.username, uid:post.uid}}></UserTag>
+  </div>
 
-   <p class="paragraph">{post.post_txt}</p>
+  <div class="postItem">
+    <ResponseBar></ResponseBar>
+  </div>
 
-   <section id="smallButtonWrapper">
-    <!-- <img class="smallButton" src="/images/comment_icon.png" alt="comment icon">
-    <img class="smallButton" src="/images/like_icon.png" alt="like icon"> -->
-
-   </section>
+   <p class="paragraph postItem">{post.post_txt}</p>
 
    {#each commentRoot.children as commentData }
 
-   <Comment comment={commentData} layer={1}></Comment>
+   <div class="postItem">
+    <Comment comment={commentData} layer={1}></Comment>
+   </div>
    {/each}
+
 
 
 
 </article>
 
 <style lang="scss">
-   // article {
-   //    border-bottom: 1px solid black;
-   //    display: block;
-   //    width: 100%;
-   //    padding: 4px;
-   //    margin-top: 6px;
-   //    margin-bottom: 6px;
-   //    background-color: white;
-
-   //    p {
-   //       font-size: 1.6rem;
-   //    }
-   // }
 
    article{
-      background: rgb(249, 246, 238);
-      border: thin solid white;
+      background: $mainDark1;
+      padding: 3px;
 
-      border-left: thin black solid;
+
+      .postItem{
+        margin: 5px;
+      }
 
       .paragraph{
-        background-color: white;
-        border-left: 1px black dotted;
-        margin: 5px;
-        padding: 10px;
+        color: $mainLight4;
+        padding-top: 5px;
+        padding-bottom: 10px;
+        padding-left: 4px;
+        border-left: thin solid $mediumDark2;
       }
-      
-
-
-        .smallButton{
-        width: 30px;
-        height: 30px;
-        background-color: white;
-        margin: 10px;
-        margin-left: 5px;
-
-        
-
-      }
-
-
-      // h1{
-      //    padding: 5px;
-      //    margin: 5px ;
-      // }
-      // p{
-      //    padding: 5px;
-      //    margin: 20px;
-      // }
 
    }
+
+
+
 </style>

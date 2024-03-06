@@ -306,6 +306,37 @@ class DbEgyTalk
       return $users;
    }
 
+   function getLikesOrDislikesFromContribution($likeOrDislike, $pid, $cid){
+
+      $stmt = "";
+      if(!is_null($pid)){
+         // we find the original comment with the pid
+         $sqlStatement = "SELECT post.:likeOrDislike FROM post WHERE post.pid = :pid;";
+         $stmt = $this->db->prepare($sqlStatement);
+         $stmt->bindValue(":pid", $pid);
+
+
+
+      }
+      else{
+         $sqlStatement = "SELECT commet.:likeOrDislike FROM comment WHERE comment.cid = :cid;";
+         $stmt = $this->db->prepare($sqlStatement);
+         $stmt->bindValue(":cid", $cid);
+         $stmt->bindValue(":cid", $cid);
+      }
+      $stmt->bindValue(":likeOrDislike", $likeOrDislike);
+      $response = [];
+      $stmt->execute();
+
+      if ($stmt->rowCount() == 1) {
+         $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+         $response = $data;
+         
+      }
+      return $response;
+   }
+
    /**
     * Söker efter användare.
     *

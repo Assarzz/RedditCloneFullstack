@@ -4,61 +4,48 @@
 </script>
 
 <header>
-    <img src="/images/loggoegy.png" alt="loggo" id="logga" />
-    <h1>EGY TALK</h1>
+
+        <div id="logo">
+            <svg width="2em" height="2em" viewBox="0 0 383 339" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 1H381V-1H2V1ZM382 2V337H384V2H382ZM381 338H1.99999V340H381V338ZM1 337V2.00001H-1V337H1ZM1.99999 338C1.44771 338 1 337.552 1 337H-1C-1 338.657 0.343128 340 1.99999 340V338ZM382 337C382 337.552 381.552 338 381 338V340C382.657 340 384 338.657 384 337H382ZM381 1C381.552 1 382 1.44771 382 2H384C384 0.343153 382.657 -1 381 -1V1ZM2 -1C0.343141 -1 -1 0.343158 -1 2.00001H1C1 1.44772 1.44772 1 2 1V-1Z" fill="currentColor" fill-opacity="0"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M182.34 8.99997C186.189 2.33331 195.811 2.33333 199.66 8.99999L288.553 162.966C286.124 164.318 282.455 165.364 276.918 165.364C270.349 165.364 264.908 163.893 260.804 162.185C244.301 141.934 219.161 129 191 129C141.294 129 101 169.294 101 219C101 268.706 141.294 309 191 309C240.706 309 281 268.706 281 219C281 213.539 280.514 208.192 279.582 203H311.666L377.195 316.5C381.044 323.167 376.233 331.5 368.535 331.5H13.4648C5.7668 331.5 0.955553 323.167 4.80456 316.5L182.34 8.99997Z" fill="currentColor"/>
+                <path d="M159 203H284C290.627 203 296 208.373 296 215V226C296 232.627 290.627 238 284 238H159C152.373 238 147 232.627 147 226V215C147 208.373 152.373 203 159 203Z" fill="currentColor"/>
+                </svg>
+                
+      
+            <h1 style="font-size: 1.5em;">EGY TALK</h1>
+        </div>
+
 
     {#if $user.auth}
+    <div>
         <Nav />
+    </div>
     {/if}
 </header>
 
+
 <style lang="scss">
-    header {
+
+
+    header{
+        display: grid;
+        grid-template-columns: 30% 70%;
+        justify-content: center;
+        align-items: center;
+        background-color: $mainDark1;
+        color: $mainLight4;
+        
         width: 100%;
-        font-size: 1.2rem;
-        text-align: left;
-        height: 80px;
-        padding-top: 5px;
-        background-image: url("/images/bgImg.png");
-        background-repeat: repeat;
-        color: white;
-        position: relative;
-        border-bottom: 2px solid rgb(124, 10, 10);
+        height: 75px;
 
-        h1 {
-            display: inline-block;
-            font-family: saker, Arial;
-            letter-spacing: 3px;
-            font-size: 2.6rem;
-            margin-top: 1.8rem;
-            margin-left: 2.5rem;
+
+    } 
+
+    #logo{
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        img {
-            float: left;
-            height: 50px;
-            margin-top: 10px;
-            margin-left: 50px;
-        }
-    }
-
-    @media only screen and (max-width: 1024px) {
-        header {          
-            height: 12rem;
-
-            img {
-                margin-left: 25px;
-            }
-        }
-    }
-
-    @media only screen and (max-width: 675px) {
-        header {
-            height: 108px;
-
-            img {
-                margin-left: 15px;
-            }
-        }
-    }
 </style>

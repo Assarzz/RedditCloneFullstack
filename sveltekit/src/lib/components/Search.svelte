@@ -22,7 +22,7 @@ async function search(){
  </form>
 
 
- <style lang="scss">
+ <!-- <style lang="scss">
     nav {
        position: relative;
        display: inline;
@@ -172,4 +172,4 @@ async function search(){
        }
     }
  </style>
- 
+  -->

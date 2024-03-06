@@ -4,6 +4,18 @@
    import { page } from "$app/stores";
     import Search from "./Search.svelte";
 
+
+    // tar tusen år. inte så effektivet svelte :(
+    import HomeIcon from "./svgIcons/HomeIcon.svelte"
+    import FriendIcon from "./svgIcons/FriendIcon.svelte";
+    import LogOutIcon from "./svgIcons/LogOutIcon.svelte";
+    import SearchIcon from "./svgIcons/SearchIcon.svelte";
+    import SettingsIcon from "./svgIcons/SettingsIcon.svelte";
+    import UserIcon from "./svgIcons/UserIcon.svelte";
+    
+
+
+
    async function signOut() {
       if ($user.auth) {
          let response = await fetch("/api/signout.php");
@@ -12,12 +24,51 @@
          goto("/login");
       }
    }
+
+   import { onMount } from "svelte";
+   
+   let navItems = []
+   let currentMouseDown
+   onMount(()=>{
+      navItems =[
+      {text:"Home", icon:HomeIcon, onClick:()=>{goto("/")}},
+      {text:$user.userdata.firstname + " " + $user.userdata.surname, icon:UserIcon,onClick:()=>{goto(`/users/${$user.userdata.uid}`)}},
+      {text:"Friends", icon:FriendIcon, onClick:()=>{}},
+      {text:"Search", icon:SearchIcon, onClick:()=>{}},
+      {text:"Settings", icon:SettingsIcon, onClick:()=>{}},
+      {text:"Log Out", icon:LogOutIcon, onClick:signOut}]
+
+      navItems.forEach(element => {
+         element.displayText = false
+      });
+   })
+
+    const MouseEnter = async function(index){
+
+    }
+    const MouseLeave = async function(index){
+
+   }
 </script>
 
-<Search></Search>
-
 <nav>
+
    <ul>
+      {#each navItems as item, index}
+
+      <li>
+         <button id="buttion" on:click={item.onClick} on:mouseenter={()=>{MouseEnter(index)}} on:mouseleave={()=>{MouseLeave(index)}}>
+            
+            <svelte:component this={item.icon} details={{width:"2em", height:"2em"}}></svelte:component>
+            <p style="font-size: 1em ;">{item.text}</p>
+
+         </button>
+      </li>
+
+   {/each}
+   </ul>
+
+   <!-- <ul>
       <li>
          <a href="/" class:active={"/" === $page.url.pathname}>
             {$user.userdata.firstname + " " + $user.userdata.surname}
@@ -34,14 +85,14 @@
          <a href="/settings" class:active={"/settings" === $page.url.pathname}>
             Inställningar</a>
       </li>
-   </ul>
+   </ul> -->
+
+
 </nav>
 
-<button class="sign" on:click={signOut}>
-   <img src="/images/logout.png" alt="Logga Ut" />
-</button>
 
-<style lang="scss">
+
+<!-- <style lang="scss">
    nav {
       position: relative;
       display: inline;
@@ -190,4 +241,64 @@
          }
       }
    }
+</style> -->
+<style lang="scss">
+
+nav ul{
+   display: flex;
+   justify-content: space-around;
+   gap: 5px;
+   height: 100%;
+   width: 100%;
+   margin: 0;
+   padding: 0;
+
+
+   &*{
+      color: white;
+   }
+   &li{
+      margin: 0;
+      padding: 0;
+      flex-grow: 1;
+
+
+   }
+
+}
+#buttion{
+   padding-left: 9px;
+   padding-right: 9px;
+   border-radius: 20px;
+
+   display: flex;
+   gap: 3px;
+   justify-content: center;
+   align-items: center;
+
+   background-color: $mainDark1;
+   color: $mainLight4;
+   text-decoration: none;
+   border: none;
+
+
+
+   &:hover{
+      background-color: rgba(169, 169, 169, 0.337);
+   }
+}
+
+#logOut{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background-color: red;
+   
+}
+
+ul{
+   display: flex;
+   
+}
+
 </style>

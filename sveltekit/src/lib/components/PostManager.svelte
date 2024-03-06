@@ -56,18 +56,13 @@
 
 <style lang="scss">
 
-
 article{
-
-  color: rgb(2,31,43);
 
   .posts{
     margin-bottom: 10px;
   }
   #loadMore{
-  width: 100%;
-  background-color: rgb(136, 12, 12);
-  color: white;
+  @include defaultBtn();
   
 }
 }

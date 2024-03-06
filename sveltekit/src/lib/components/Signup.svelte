@@ -41,7 +41,7 @@
    <input type="submit" value="Skapa Konto" />
 </form>
 
-<style lang="scss">
+<!-- <style lang="scss">
    /* Meddelanderuta */
    div {
       position: fixed;
@@ -119,4 +119,4 @@
          left: 10px;
       }
    }
-</style>
+</style> -->

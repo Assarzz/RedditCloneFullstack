@@ -1,84 +1,92 @@
-/**
- * global.scss 
- */
-* {
-    margin: 0;
-    padding: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+// $mainDark1: #363062;
+// $mediumDark2: #435585;
+// $mediumLight3: #818FB4;
+// $mainLight4: #F5E8C7;
+
+$mainDark1: #352F44;
+$mediumDark2: #5C5470;
+$mediumLight3: #B9B4C7;
+$mainLight4: #FAF0E6;
+
+// $mainDark1: #191919;
+// $mediumDark2: #750E21;
+// $mediumLight3: #E3651D;
+// $mainLight4: #BED754;
+
+*{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: $mainLight4;
+}
+
+ul, ol{
+    list-style-type: none;
+    text-decoration: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+@mixin defaultBtn{
+    width: 100%;
+    border-radius: 12px;
+    background-color: $mediumLight3;
+    border: none;
+    color: $mainLight4;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+@mixin defaultInput{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
     box-sizing: border-box;
+    background-color: $mainDark1;
+    color: $mainLight4;
 }
 
-@font-face {
-    font-family: saker;
-    src: url(/fonts/SakerSansMedium.ttf);
+@mixin noButtonDecoration{
+    border: none;
+    text-decoration: none;
+
 }
 
-@font-face {
-    font-family: saker;
-    src: url(/fonts/SakerSansBold.ttf);
-    font-weight: bold;
+@mixin inlineFlexCenter{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 }
 
-html {
-    font-size: 62.5%;
-}
+@mixin responseButton{
 
-body {
-    font-size: 1.6rem;
-    height: 100%;
-    background-color: #e8e8e8;
-    position: relative;
-    min-height: 100vh;
-}
-
-input,
-p,
-label,
-button {
-    font-size: 1.4rem;
-}
-
-input {
-    padding: 0.3rem;
-}
-
-p {
-    text-align: justify;
-}
-
-main {
-    max-width: 768px;
-    margin: 0 auto;
-    padding: 20px 4px 45px 4px;
-    position: relative;
-    height: 100%;
-
-    h1 {
-        font-family: saker, Arial, Helvetica, sans-serif;
-        font-size: 2.2rem;
-        letter-spacing: 0.4rem;
-    }
-
-    h2 {
-        margin-top: 0.5rem;
-        font-family: Arial, sans-serif;
-        font-size: 1.8rem;
-        letter-spacing: 2px;
-    }
-
-    h3 {
-        margin-top: 4px;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 1.6rem;
-        margin-bottom: 0.5rem;
-    }
-
-    h4 {
-        margin-top: 4px;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 1.4rem;
-        margin-bottom: 0.5rem;
+    *{
+        color: $mainLight4;
+        background-color: $mediumDark2;
+        @include noButtonDecoration;
+        @include inlineFlexCenter;
+        gap: 5px;
     }
 }
 
-
+@keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }

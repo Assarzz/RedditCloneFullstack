@@ -1,5 +1,5 @@
 <script>
-   import "$lib/global.scss";
+   //import "$lib/global.scss";
    import Header from "$lib/components/Header.svelte";
    import Footer from "$lib/components/Footer.svelte";
 </script>
@@ -12,4 +12,12 @@
 <main>
    <slot />
 </main>
-<Footer />
+<!-- <Footer /> -->
+
+
+<style lang="scss">
+
+   :global(body){
+      background-color: $mediumDark2;
+   }
+</style>

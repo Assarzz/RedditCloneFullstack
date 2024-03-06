@@ -8,7 +8,9 @@ $db = new DbEgyTalk();
 
 // we get all the user data except from uid, since.... we already have that.
 
-if (isset($_GET["uid"])){
+if (isset($_GET["uid"]))
+{
+    
 
     $result = $db->getUserFromUid($_GET["uid"]);
     unset($result["uid"]);

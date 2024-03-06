@@ -18,9 +18,6 @@
       }
    });
 
-
-
-    
     let allUsers = []
     onMount(async ()=>{
         const response = await fetch("/api/getAllUsers.php");

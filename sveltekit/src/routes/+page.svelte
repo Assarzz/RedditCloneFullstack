@@ -18,26 +18,24 @@
       }
    });
 
-
 </script>
 
+<section>
+   <h1>Latest Posts!</h1>
 
-<h1>Latest Posts!</h1>
+   <div>
+      <PostManager></PostManager>
+   </div>
+</section>
 
-<PostManager></PostManager>
 
 
 <style lang="scss">
-   section {
-      max-width: 540px;
 
-      hr {
-         margin-bottom: 16px;
-         margin-top: 8px;
-      }
-
-      div {
-         border-left: 2px solid green;
-      }
+   section{
+      width: 80%;
+      left: 50%;
+      position: absolute;
+      transform: translateX(-50%);
    }
 </style>
