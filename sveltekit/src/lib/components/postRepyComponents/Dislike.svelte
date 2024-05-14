@@ -6,6 +6,8 @@
     import {blur} from "svelte/transition"
     let count = 0
     let state = "nothing"
+    export let pid
+    export let cid
     const dispatch = createEventDispatcher()
     const likeStateObj = getContext("likeState")
     likeStateObj.addListener((likeDislike)=>{
@@ -13,7 +15,11 @@
     })
 
     async function getCounts(){
-        return 10
+        const res = await fetch(`/api/responseEndpoints/getDislikesFromContribution.php?${pid? "pid":"cid"}=${pid? pid: cid}`)
+        
+        // {like_count: 0}
+        const data = await res.json()
+        return data.dislike_count
     }
     async function addCount(){
         count ++

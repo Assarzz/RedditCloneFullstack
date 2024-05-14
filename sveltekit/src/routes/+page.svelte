@@ -9,8 +9,14 @@
    import { goto, afterNavigate } from "$app/navigation";
    import { auth } from "$lib/shared/auth.js";
    import PostManager from "../lib/components/PostManager.svelte";
+    import { onMount } from "svelte";
+
+   onMount(async ()=>{
+      console.log("on mount")
+   })
 
    afterNavigate(async () => {
+      console.log("after navigation")
       $user = await auth();
 
       if (!$user.auth) {

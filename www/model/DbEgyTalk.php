@@ -134,11 +134,16 @@ class DbEgyTalk
     *
     * @return array med alla poster
     */
-   function getAllPosts(){
+   function getAllPostsFromUid($uid){
       $posts = [];
+      $stmt = $this->db->prepare("SELECT * FROM post WHERE post.uid = :uid");
+      $stmt->bindValue(":uid", $uid);
+      $stmt->execute();
 
-      // KOD!
-
+      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      foreach( $result as $row ){
+         $posts[] = $row;
+      }
       return $posts;
    }
    function getPosts($pidStart, $pidEnd){
@@ -306,25 +311,21 @@ class DbEgyTalk
       return $users;
    }
 
-   function getLikesOrDislikesFromContribution($likeOrDislike, $pid, $cid){
-
+   function getLikesFromContribution($pid, $cid){
+      
       $stmt = "";
       if(!is_null($pid)){
          // we find the original comment with the pid
-         $sqlStatement = "SELECT post.:likeOrDislike FROM post WHERE post.pid = :pid;";
+         $sqlStatement = "SELECT COUNT(*) AS like_count FROM likes WHERE likes.pid = :pid;";
          $stmt = $this->db->prepare($sqlStatement);
          $stmt->bindValue(":pid", $pid);
 
-
-
       }
       else{
-         $sqlStatement = "SELECT commet.:likeOrDislike FROM comment WHERE comment.cid = :cid;";
+         $sqlStatement = "SELECT COUNT(*) AS like_count FROM likes WHERE likes.cid = :cid;";
          $stmt = $this->db->prepare($sqlStatement);
          $stmt->bindValue(":cid", $cid);
-         $stmt->bindValue(":cid", $cid);
       }
-      $stmt->bindValue(":likeOrDislike", $likeOrDislike);
       $response = [];
       $stmt->execute();
 
@@ -335,6 +336,56 @@ class DbEgyTalk
          
       }
       return $response;
+   }
+   function getDislikesFromContribution($pid, $cid){
+
+      $stmt = "";
+      if(!is_null($pid)){
+         // we find the original comment with the pid
+         $sqlStatement = "SELECT COUNT(*) AS dislike_count FROM dislikes WHERE dislikes.pid = :pid;";
+         $stmt = $this->db->prepare($sqlStatement);
+         $stmt->bindValue(":pid", $pid);
+
+
+
+      }
+      else{
+         $sqlStatement = "SELECT COUNT(*) AS dislike_count FROM dislikes WHERE dislikes.cid = :cid;";
+         $stmt = $this->db->prepare($sqlStatement);
+         $stmt->bindValue(":cid", $cid);
+      }
+      $response = [];
+      $stmt->execute();
+
+      if ($stmt->rowCount() == 1) {
+         $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+         $response = $data;
+         
+      }
+      return $response;
+   }
+
+   function addLikeToContribution($uid, $pid, $cid){
+
+      //INSERT INTO `likes` (`like_id`, `uid`, `pid`, `cid`) VALUES (NULL, '956eef04-c402-11ee-b2a4-0242ac150003', '4', NULL);
+      $sqlStatement = "INSERT INTO `likes` (`like_id`, `uid`, `pid`, `cid`) VALUES (NULL, :uid, :pid, :cid);";
+      $stmt = $this->db->prepare($sqlStatement);
+      $stmt->bindValue(":cid", $cid);
+      $stmt->bindValue(":pid", $pid);
+      $stmt->bindValue(":uid", $uid);
+
+      $response = [];
+      $stmt->execute();
+
+      if ($stmt->rowCount() == 1) {
+         $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+         $response = $data;
+         
+      }
+      return $response;
+
    }
 
    /**

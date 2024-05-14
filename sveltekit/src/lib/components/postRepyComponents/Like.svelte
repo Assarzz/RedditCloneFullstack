@@ -2,7 +2,11 @@
 <script>
     import { createEventDispatcher, onMount } from "svelte";
     import {getContext} from "svelte"
-    import {blur} from "svelte/transition"
+    import {blur, fade} from "svelte/transition"
+
+    export let pid
+    export let cid
+    export let likeBtnBeenClicked
     let state = "nothing"
     let count = 0
     const dispatch = createEventDispatcher()
@@ -11,7 +15,11 @@
         state = likeDislike
     })
     async function getCounts(){
-        return 10
+        const res = await fetch(`/api/responseEndpoints/getLikesFromContribution.php?${pid? "pid":"cid"}=${pid? pid: cid}`)
+        
+        // {like_count: 0}
+        const data = await res.json()
+        return data.like_count
     }
     async function addCount(){
         count ++
@@ -20,17 +28,23 @@
         count --
     }
     onMount(async ()=>{
+        console.log(pid, cid)
         count = await getCounts()
+
+
     })
     function toggle(){
         dispatch("like")
-        sendUpdateRequest()
+        const data = sendUpdateRequest("api/update")
     }
 
-    async function sendUpdateRequest(){
-        fetch("api/updateSome", {
+    async function sendUpdateRequest(apiUrl){
+        const res = await fetch(apiUrl, {
             method: "POST",
         })
+        const data = await res.json()
+        
+        return data
     }
 </script>
 

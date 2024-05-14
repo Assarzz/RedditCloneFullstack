@@ -2,7 +2,7 @@
 <script>
 
 import PostForm from "$lib/components/PostForm.svelte";
-import { each } from "svelte/internal";
+import { each, onMount } from "svelte/internal";
 import Comment from "./Comment.svelte";
 
 import {CommentTree} from "../shared/commentTree.mjs"
@@ -16,8 +16,8 @@ export let post;
     const commentTree = new CommentTree(post.commentsData)
     const commentRoot = commentTree.getRoot
 
-    //console.log(commentRoot.children)
-
+  onMount(()=>{
+  })
 </script>
 
 <article>
@@ -28,7 +28,7 @@ export let post;
   </div>
 
   <div class="postItem">
-    <ResponseBar></ResponseBar>
+    <ResponseBar details={{pid:post.pid, cid:null}}></ResponseBar>
   </div>
 
    <p class="paragraph postItem">{post.post_txt}</p>

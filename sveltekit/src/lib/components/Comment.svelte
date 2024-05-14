@@ -1,5 +1,5 @@
 <script>
-    import { children } from "svelte/internal";
+    import { children, onMount } from "svelte/internal";
     import CommentForm from "./CommentForm.svelte";
     import UserTag from "./UserTag.svelte";
     import ResponseBar from "./postRepyComponents/ResponseBar.svelte";
@@ -10,6 +10,10 @@
     */  
    export let comment;
    export let layer;
+
+   onMount(()=>{
+      //console.log(comment)
+   })
 </script>
 
 <article style="margin-left: {layer*20}px ;">
@@ -20,7 +24,7 @@
     </div>
 
     <div class="postItem">
-      <ResponseBar></ResponseBar>
+      <ResponseBar details={{pid:null, cid:comment.cid}}></ResponseBar>
     </div>
   
 

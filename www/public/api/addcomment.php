@@ -8,7 +8,7 @@
  */
 session_start();
 
-include('../../../model/DbEgyTalk.php');
+include('../../model/DbEgyTalk.php');
 $db = new DbEgyTalk();
 
 $success = false;
