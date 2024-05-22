@@ -9,8 +9,6 @@ $db = new DbEgyTalk();
 
 if (isset($_GET["username"]))
 {
-    
-
     $result = $db->getUserFromUsername($_GET["username"]);
 
 }

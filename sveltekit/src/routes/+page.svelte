@@ -1,28 +1,36 @@
-<script>
-   import Load from "$lib/components/Load.svelte";
-   import PostForm from "$lib/components/PostForm.svelte";
-   import Post from "$lib/components/Post.svelte";
-   import CommentForm from "$lib/components/CommentForm.svelte";
-   import Comment from "$lib/components/Comment.svelte";
+<script lang="ts">
 
    import { user } from "$lib/stores/user.js";
    import { goto, afterNavigate } from "$app/navigation";
-   import { auth } from "$lib/shared/auth.js";
+   import { auth } from "$lib/shared/auth";
    import PostManager from "../lib/components/PostManager.svelte";
+
+   import {type PostFull} from "$lib/types/contribution" 
+   import {loadUser, loadPostFulls} from "$lib/ts_files/database_com"
     import { onMount } from "svelte";
 
-   onMount(async ()=>{
-      console.log("on mount")
-   })
+   export let data: {value:PostFull[]}
 
-   afterNavigate(async () => {
-      console.log("after navigation")
-      $user = await auth();
+   // afterNavigate(async () => {
 
-      if (!$user.auth) {
-         goto("/login");
-      }
-   });
+   //    const authenticated = await auth();
+
+   //    if (authenticated.auth && !$user.auth){
+   //       // this is right after the session has been created and we have not yet updated the store
+   //       // we update the store!
+
+   //       (async ()=>{
+   //          user.set({
+   //          user:await loadUser(authenticated.uid!),
+   //          auth:true
+   //       })})()
+
+   //    }
+
+   //    if (!authenticated.auth) {
+   //       goto("/login");
+   //    }
+   // });
 
 </script>
 
@@ -30,7 +38,7 @@
    <h1>Latest Posts!</h1>
 
    <div>
-      <PostManager></PostManager>
+      <PostManager posts={data.value}></PostManager>
    </div>
 </section>
 
@@ -38,10 +46,9 @@
 
 <style lang="scss">
 
-   section{
+section{
       width: 80%;
-      left: 50%;
-      position: absolute;
-      transform: translateX(-50%);
+      margin-left: auto;
+      margin-right: auto;
    }
 </style>

@@ -1,16 +1,10 @@
 <script>
-   import { user } from "$lib/stores/user.js";
    import { goto } from "$app/navigation";
 
-   import {auth} from "$lib/shared/auth.js"
-
    async function signIn(e) {
-
+      
       const data = new FormData(e.target);
-
-      const url = "/api/auth.php"
-
-      const response = await fetch(url, {
+      const response = await fetch("/api/auth.php", {
         method: "post",
         body: data
      });

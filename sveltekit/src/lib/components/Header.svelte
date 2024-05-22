@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
     import Nav from "$lib/components/Nav.svelte";
-    import { user } from "$lib/stores/user.js";
+    import { user } from "$lib/stores/user";
+
 </script>
 
 <header>
@@ -17,11 +18,12 @@
         </div>
 
 
-    {#if $user.auth}
-    <div>
-        <Nav />
-    </div>
-    {/if}
+        {#if $user.auth}
+        <div>
+            <Nav />
+        </div>
+        {/if}
+
 </header>
 
 

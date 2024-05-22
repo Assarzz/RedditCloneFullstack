@@ -52,5 +52,3 @@
 <Like {pid}{cid}{likeBtnBeenClicked} on:like={like}></Like>
 
 <Dislike {pid}{cid}{DislikeBtnBeenClicked} on:dislike={dislike}></Dislike>
-
-<ReplyComment></ReplyComment>

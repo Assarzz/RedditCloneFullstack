@@ -15,10 +15,9 @@
 
    section{
       width: 60%;
-      left: 50%;
-      position: absolute;
-      transform: translateX(-50%);
       color: $mainLight4;
+      margin-left: auto;
+      margin-right: auto;
    }
    #createAccount{
       @include defaultBtn();

@@ -1,10 +1,7 @@
-<script>
-   import { user } from "$lib/stores/user.js";
-   import { goto } from "$app/navigation";
-   import { page } from "$app/stores";
-    import Search from "./Search.svelte";
-
-
+<script lang="ts">
+   import { user } from "$lib/stores/user";
+   import { goto, invalidate, replaceState } from "$app/navigation";
+ 
     // tar tusen år. inte så effektivet svelte :(
     import HomeIcon from "./svgIcons/HomeIcon.svelte"
     import FriendIcon from "./svgIcons/FriendIcon.svelte";
@@ -13,51 +10,76 @@
     import SettingsIcon from "./svgIcons/SettingsIcon.svelte";
     import UserIcon from "./svgIcons/UserIcon.svelte";
     
-
-
-
    async function signOut() {
       if ($user.auth) {
-         let response = await fetch("/api/signout.php");
+         // destroys session 
+         await fetch("/api/signout.php");
 
-         $user = await response.json();
+         // reset authentication store
+         console.log({...$user}, "before reset")
+         user.set({ user: null, auth: false })
+         console.log({...$user}, "after reset")
          goto("/login");
       }
    }
-
-   import { onMount } from "svelte";
    
-   let navItems = []
+
+   type NavItem ={
+      text:string,
+      icon:any,
+      onClick:()=>void,
+      displayText:boolean
+   }
+
    let currentMouseDown
-   onMount(()=>{
-      navItems =[
-      {text:"Home", icon:HomeIcon, onClick:()=>{goto("/")}},
-      {text:$user.userdata.firstname + " " + $user.userdata.surname, icon:UserIcon,onClick:()=>{goto(`/users/${$user.userdata.uid}`)}},
-      {text:"Friends", icon:FriendIcon, onClick:()=>{}},
-      {text:"Search", icon:SearchIcon, onClick:()=>{}},
-      {text:"Settings", icon:SettingsIcon, onClick:()=>{}},
-      {text:"Log Out", icon:LogOutIcon, onClick:signOut}]
 
-      navItems.forEach(element => {
-         element.displayText = false
-      });
-   })
+      const navItems:NavItem[] =[
+      {displayText:false, text:"Home", icon:HomeIcon, onClick:()=>{goto("/")}},
+      {displayText:false, text:$user.user?.firstName + " " + $user.user?.lastName, icon:UserIcon,onClick:()=>{goto(`/users/${$user.user?.uid}`)}},
+      {displayText:false, text:"Friends", icon:FriendIcon, onClick:()=>{}},
+      //{displayText:false, text:"Search", icon:SearchIcon, onClick:()=>{}},
+      {displayText:false, text:"Settings", icon:SettingsIcon, onClick:()=>{}},
+      {displayText:false,text:"Log Out", icon:LogOutIcon, onClick:signOut}]
 
-    const MouseEnter = async function(index){
+    const MouseEnter = async function(index:number){
 
     }
-    const MouseLeave = async function(index){
+    const MouseLeave = async function(index:number){
 
    }
+   let content = ""
+    async function submitForm() {
+        const response = await fetch(`/api/getUserFromUsername.php?username=${content}`)
+        const user = await response.json()
+        if (!response.ok) {
+         goto(`/users/${content}`)
+            return
+        }
+        goto(`/users/${user.uid}`)
+    }
 </script>
 
 <nav>
 
    <ul>
+
+      <li>
+         <button class="button" id="search">
+            
+            <SearchIcon  details={{width:"2em", height:"2em"}}></SearchIcon>
+
+            <p style="font-size: 1em ;">Search</p>
+
+            <form on:submit|preventDefault={submitForm} method="post" id="contentForm">
+               <input type="search" style="color: black;" bind:value={content}>
+           </form>
+
+         </button>
+      </li>
       {#each navItems as item, index}
 
       <li>
-         <button id="buttion" on:click={item.onClick} on:mouseenter={()=>{MouseEnter(index)}} on:mouseleave={()=>{MouseLeave(index)}}>
+         <button class="button" on:click={item.onClick} on:mouseenter={()=>{MouseEnter(index)}} on:mouseleave={()=>{MouseLeave(index)}}>
             
             <svelte:component this={item.icon} details={{width:"2em", height:"2em"}}></svelte:component>
             <p style="font-size: 1em ;">{item.text}</p>
@@ -91,157 +113,6 @@
 </nav>
 
 
-
-<!-- <style lang="scss">
-   nav {
-      position: relative;
-      display: inline;
-      margin-left: 2rem;
-
-      ul {
-         list-style-type: none;
-         display: inline;
-
-         li {
-            margin-left: 1rem;
-            display: inline;
-
-            a {
-               display: inline-block;
-               padding: 6px;
-               border-bottom: 1px solid rgb(124, 10, 10);
-               font-size: 1.4rem;
-               text-decoration: none;
-               color: white;
-               background-color: black;
-
-               &:hover {
-                  border-bottom: 1px solid red;
-                  color: #ffffff;
-               }
-
-               &.active {
-                  border-bottom: 1px solid red;
-                  color: #ffffff;
-               }
-            }
-         }
-      }
-   }
-
-   button {
-
-      background-color: transparent;
-      border: none;
-
-      img {
-         width: 14px;
-         height: auto;
-      }
-
-      &.sign {
-         border: none;
-         border-radius: 4px;
-         padding: 5px 15px;
-         text-decoration: none;
-         color: white;
-         background-color: rgb(124, 10, 10);
-         margin-left: 1.8rem;
-
-         img {
-            display: none;
-         }
-
-         &:hover {
-            background-color: gray;
-         }
-
-         &::after {
-            content: "Logga Ut";
-         }
-      }
-
-      &:hover {
-         cursor: pointer;
-      }
-
-      img {
-         width: 28px;
-         margin-bottom: -10px;
-         &:hover {
-            opacity: 0.5;
-         }
-      }
-   }
-
-   form {
-      display: inline;
-      margin-bottom: 0.7rem;
-
-      input[type="text"] {
-         margin-top: 0.5rem;
-         margin-left: 1.5em;
-         font-size: 1.4rem;
-         width: 20rem;
-      }
-   }
-
-   @media only screen and (max-width: 1024px) {
-      nav {
-         position: absolute;
-         display: block;
-         bottom: 5px;
-         margin-left: 5px;
-
-         li {
-            margin-left: 0.4rem;
-            display: inline;
-         }
-      }
-   }
-
-   @media only screen and (max-width: 675px) {
-      input,
-      button.search {
-         display: none;
-         margin-top: 1rem;
-         justify-content: right;
-      }
-
-      button.sign {
-         margin-left: 2.6rem;
-         padding: 0;
-         background-color: transparent;
-         position: absolute;
-         right: 15px;
-         top: 15px;
-         &:hover {
-            background-color: transparent;
-            color: alpha($color: #000000);
-         }
-
-         &::after {
-            content: none;
-         }
-
-         img {
-            display: inline;
-         }
-      }
-
-      button.search {
-         display: none;
-      }
-
-      nav {
-         ul {
-            li {
-               margin-left: 0.3rem;
-            }
-         }
-      }
-   }
-</style> -->
 <style lang="scss">
 
 nav ul{
@@ -266,7 +137,7 @@ nav ul{
    }
 
 }
-#buttion{
+.button{
    padding-left: 9px;
    padding-right: 9px;
    border-radius: 20px;
@@ -285,6 +156,18 @@ nav ul{
 
    &:hover{
       background-color: rgba(169, 169, 169, 0.337);
+   }
+}
+
+#search{
+   *{
+      margin: 5px;
+      
+   }
+   input{
+   color: $mainDark1;
+   border-radius: 10px;
+   padding: 3px;
    }
 }
 

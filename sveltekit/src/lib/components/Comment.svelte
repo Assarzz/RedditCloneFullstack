@@ -1,25 +1,18 @@
-<script>
-    import { children, onMount } from "svelte/internal";
-    import CommentForm from "./CommentForm.svelte";
+<!-- <script lang="ts">
     import UserTag from "./UserTag.svelte";
     import ResponseBar from "./postRepyComponents/ResponseBar.svelte";
 
-   /**
-    * Data som kommer in i komponenten
-    * <Comment comment = {...} />
-    */  
-   export let comment;
+    import type{CommentFull } from "$lib/types/contribution"
+
+   export let comment:CommentFull;
    export let layer;
 
-   onMount(()=>{
-      //console.log(comment)
-   })
 </script>
 
 <article style="margin-left: {layer*20}px ;">
 
    <div class="postItem">
-      <UserTag details={{username:comment.username, uid:comment.uid}}></UserTag>
+      <UserTag user={comment.user} highlightOwner={false} linkNotActive={false}></UserTag>
 
     </div>
 
@@ -28,10 +21,10 @@
     </div>
   
 
-   <p class="paragraph postItem">{comment.comment_txt}</p>
+   <p class="paragraph postItem">{comment.content}</p>
 
 
-   {#each comment.children as child}
+   {#each comment.directChildren as child}
    
    <div class="postItem">
       <svelte:self comment={child} layer={layer+1}></svelte:self>
@@ -110,4 +103,5 @@
 //    // }
 
 // }
-// </style>
+
+// </style> -->

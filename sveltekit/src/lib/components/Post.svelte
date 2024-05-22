@@ -1,46 +1,35 @@
+<!-- 
+<script lang="ts">
 
-<script>
-
-import PostForm from "$lib/components/PostForm.svelte";
-import { each, onMount } from "svelte/internal";
 import Comment from "./Comment.svelte";
-
-import {CommentTree} from "../shared/commentTree.mjs"
-import CommentForm from "./CommentForm.svelte";
-import UserTag from "./UserTag.svelte";
-import PostActionIcon from "./PostActionIcon.svelte"
 import ResponseBar from "./postRepyComponents/ResponseBar.svelte";
 
-export let post;
+import UserTag from "./UserTag.svelte";
+import {type PostFull} from "$lib/types/contribution"
 
-    const commentTree = new CommentTree(post.commentsData)
-    const commentRoot = commentTree.getRoot
+export let post:PostFull;
 
-  onMount(()=>{
-  })
 </script>
 
 <article>
 
 
   <div class="postItem">
-    <UserTag details={{username:post.username, uid:post.uid}}></UserTag>
+    <UserTag user={post.user} highlightOwner={false} linkNotActive={false}></UserTag>
   </div>
 
   <div class="postItem">
     <ResponseBar details={{pid:post.pid, cid:null}}></ResponseBar>
   </div>
 
-   <p class="paragraph postItem">{post.post_txt}</p>
+   <p class="paragraph postItem">{post.content}</p>
 
-   {#each commentRoot.children as commentData }
+   {#each post.directChildren as comment }
 
    <div class="postItem">
-    <Comment comment={commentData} layer={1}></Comment>
+    <Comment comment={comment} layer={1}></Comment>
    </div>
    {/each}
-
-
 
 
 </article>
@@ -68,4 +57,4 @@ export let post;
 
 
 
-</style>
+</style> -->

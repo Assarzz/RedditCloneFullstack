@@ -1,13 +1,14 @@
-<script>
-   import { user } from "$lib/stores/user.js";
+<script lang="ts">
+   import { user as userStore } from "$lib/stores/user";
+   import type {User} from "$lib/types/contribution";
 </script>
 
 <footer>
    <p>
       EGY TALK
-      {#if $user.auth}
+      {#if $userStore.auth}
          Användare:
-         {$user.userdata.firstname + " " + $user.userdata.surname}
+         {$userStore.user?.firstName} {$userStore.user?.lastName}
       {/if}
    </p>
 </footer>
